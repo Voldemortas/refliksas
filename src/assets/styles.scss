@@ -144,3 +144,45 @@ dialog::backdrop {
   left: 0px;
   background: rgba(0, 0, 0, 0.5);
 }
+
+.details {
+  @extend .signUpForm;
+  width: 950px;
+}
+
+.details-grid {
+  width: 100%;
+}
+
+.details-grid-image {
+  width: 300px;
+  background-color: $color3;
+  height: 400px;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.details-grid-player {
+  width: 600px;
+  height: 400px;
+  background-color: black;
+  color: white;
+  display: inline-block;
+}
+
+.details-grid-button {
+  text-align: left;
+  padding-left: 8px;
+}
+
+.details-grid-button button {
+  height: 40px;
+  background-color: #89cff0;
+  border-width: 0px;
+  margin: 10px;
+}
+
+.details-grid-button button:hover {
+  cursor: pointer;
+  background-color: #99dfff;
+}
