@@ -13,6 +13,7 @@ body {
   background-color: $color4;
   margin: 0;
   padding: 0;
+  height: 100%;
 }
 
 a {
@@ -32,11 +33,11 @@ a:active {
   font-size: 22px;
   text-align: center;
 }
-.header .signIn {
+.signIn {
   position: absolute;
   right: 20px;
 }
-.header .signIn a {
+.signIn a {
   margin: 10px;
 }
 .header .header-text {
@@ -74,4 +75,72 @@ a:active {
   width: 300px;
   height: 400px;
   background-color: $color3;
+}
+
+.inputElement {
+  @extend .searchBar;
+  padding-top: 20px;
+}
+.inputElement .inputElement-input {
+  @extend .searchBar-input;
+}
+.inputElement .inputElement-input:focus {
+  outline: 0;
+}
+.inputElement .inputElement-button {
+  width: calc(100% + 6px);
+  height: 100%;
+  border-radius: 4px;
+  font-size: 30px;
+}
+.inputElement .inputElement-button:hover {
+  cursor: pointer;
+  background-color: $color4;
+}
+.inputElement .inputElement-button:active {
+  background-color: white;
+}
+
+main {
+  text-align: center;
+  height: calc(100% - 300px);
+}
+
+.signUpForm {
+  display: inline-block;
+  background-color: white;
+  width: 80%;
+  height: 100%;
+}
+
+#login {
+  width: 500px;
+  border-radius: 4px;
+  border-width: 1px;
+  top: 50px;
+  text-align: center;
+}
+.dialog-close {
+  float: right;
+  border-color: black;
+  border-width: 1px;
+  border-style: solid;
+  background-color: red;
+  border-radius: 100%;
+  width: 20px;
+  height: 19px;
+  padding-top: 1px;
+  text-align: center;
+}
+.dialog-close:hover {
+  cursor: pointer;
+  user-select: none;
+}
+dialog::backdrop {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  background: rgba(0, 0, 0, 0.5);
 }

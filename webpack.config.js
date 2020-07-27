@@ -3,7 +3,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
-  entry: { index: './src/index.js', browse: './src/browse.js' },
+  entry: {
+    index: './src/index.js',
+    browse: './src/browse.js',
+    signup: './src/signup.js',
+  },
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
@@ -27,6 +31,11 @@ module.exports = {
       filename: 'browse.html',
       template: 'src/pages/index.html',
       chunks: ['browse'],
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'signup.html',
+      template: 'src/pages/index.html',
+      chunks: ['signup'],
     }),
   ],
   module: {
