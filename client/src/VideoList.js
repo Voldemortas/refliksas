@@ -1,33 +1,41 @@
-export default function VideoList(name = '') {
+export default async function VideoList(
+  name = '',
+  link = 'http://localhost:3000/',
+  amount = 10,
+) {
   const element = document.createElement('div')
   element.setAttribute('class', 'videoList')
-  element.innerHTML = `
-  <h2>${name}</h2>
-  <div class="videoList-box">
-    <div class="videoList-image"></div>
-    <div class="videoList-title">
-      Title
-    </div>
-  </div>
-  <div class="videoList-box">
-    <div class="videoList-image"></div>
-    <div class="videoList-title">
-      Title
-    </div>
-  </div>
-  <div class="videoList-box">
-    <div class="videoList-image"></div>
-    <div class="videoList-title">
-      Title
-    </div>
-  </div>
-  <div class="videoList-box">
-    <div class="videoList-image"></div>
-    <div class="videoList-title">
-      Title
-    </div>
-  </div>
-  `
+  let data = { success: false }
 
-  return element
+  try {
+    data = await (await fetch(link)).json()
+  } catch (e) {
+    console.log(e)
+  }
+  if (data.success) {
+    for (let i = 0; i < Math.min(data.movies.length, 20); i++) {
+      element.innerHTML += `
+      <div class="videoList-box">
+        <div class="videoList-image"><img src="${data.movies[i].image}" /></div>
+        <div class="videoList-title">
+          ${data.movies[i].title}
+        </div>
+      </div>`
+    }
+  } else {
+    for (let i = 0; i < amount; i++) {
+      element.innerHTML += `
+  <div class="videoList-box">
+    <div class="videoList-image"></div>
+    <div class="videoList-title">
+      Title
+    </div>
+  </div>`
+    }
+  }
+  const container = document.createElement('div')
+  container.setAttribute('class', 'listContainer')
+  container.innerHTML = ` <h2>${name}</h2>`
+  container.appendChild(element)
+  return container
 }

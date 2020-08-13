@@ -12,5 +12,8 @@ const header = () => {
   return element
 }
 
-document.body.appendChild(header())
-document.body.appendChild(VideoList('Most popular movies'))
+;(async () => {
+  document.body.appendChild(header())
+  document.body.appendChild(await VideoList('Most popular movies'))
+  document.body.appendChild(await VideoList('Most popular movies2'))
+})()

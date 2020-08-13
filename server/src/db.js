@@ -24,6 +24,7 @@ const getAllMovies = async () => {
   let result = []
   mongoose.connect('mongodb://localhost/reflix', {
     useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
 
   const db = mongoose.connection
@@ -53,13 +54,13 @@ const insertMovies = async (movies) => {
   let result = false
   mongoose.connect('mongodb://localhost/reflix', {
     useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
 
   const db = mongoose.connection
   db.on('error', console.error.bind(console, 'connection error:'))
-  let formatedMovies = movies.map((e) => new Movie(e))
   try {
-    await Movie.insertMany(formatedMovies, async (err, docs) => {
+    await Movie.insertMany(movies, {}, async (err, docs) => {
       result = err === null
       mongoose.disconnect()
     })
@@ -67,4 +68,25 @@ const insertMovies = async (movies) => {
   return result
 }
 
-module.exports = { insertMovies, getAllMovies, reflixMovie }
+/**
+ * @returns {Promise<boolean>}
+ */
+
+const removeAll = async () => {
+  let result = false
+  mongoose.connect('mongodb://localhost/reflix', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+
+  const db = mongoose.connection
+  db.on('error', console.error.bind(console, 'connection error:'))
+  try {
+    await Movie.deleteMany({}, async (err, docs) => {
+      result = err === null
+      mongoose.disconnect()
+    })
+  } catch (e) {}
+  return result
+}
+module.exports = { insertMovies, getAllMovies, reflixMovie, removeAll }
