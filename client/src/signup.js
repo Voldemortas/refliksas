@@ -30,16 +30,8 @@ const signUpForm = () => {
 const script = () => {
   const element = document.createElement('script')
   element.innerHTML = `
-setInterval(() => {  
-  if(firebase.auth().currentUser !== null){
-    window.location = 'browse.html'
-  }
-}, 500)
 const form = document.getElementById('form')
 const errorDiv = document.getElementById('error')
-form.addEventListener('submit', () => {
-  event.preventDefault();
-}) 
 const register = async () => {
   if(form.elements[1].value !== form.elements[2].value){
     errorDiv.innerHTML = 'Passwords must match'
@@ -54,8 +46,6 @@ const register = async () => {
   }
   if((signUp.user || '') === ''){
     errorDiv.innerHTML = signUp.message || 'Error'
-  }else{
-    window.location = 'browse.html'
   }
 } 
 `
