@@ -1,5 +1,4 @@
 import './assets/styles.scss'
-import './login.js'
 
 const signUpForm = () => {
   const element = document.createElement('main')

@@ -44,25 +44,129 @@
       let db = firebase.firestore()
     </script>
     <header class="header" id="header"></header>
+    <datalist id="search-list"> </datalist>
+    <dialog id="login">
+      <div class="dialog-close" onclick="closeLogin()">×</div>
+      <div class="signUpForm">
+        <h3>Login</h3>
+        <div id="error"></div>
+        <form id="form">
+          <div class="inputElement">
+            <input
+              type="email"
+              class="inputElement-input"
+              placeholder="email"
+            />
+          </div>
+          <br />
+          <div class="inputElement">
+            <input
+              type="password"
+              class="inputElement-input"
+              placeholder="password"
+            />
+          </div>
+          <br />
+          <div class="inputElement">
+            <button class="inputElement-button" onclick="login()">Login</button>
+          </div>
+          <br />
+        </form>
+        <a href="#">Forgot password</a><br />
+      </div>
+    </dialog>
     <script>
+      function openLogin() {
+        document.getElementById('login').showModal()
+      }
+      function closeLogin() {
+        document.getElementById('login').close()
+      }
+      const form = document.getElementById('form')
+      const errorDiv = document.getElementById('error')
+      form.addEventListener('submit', () => {
+        event.preventDefault()
+      })
+      const login = async () => {
+        errorDiv.innerHTML = ''
+        let login = {}
+        try {
+          signUp = await firebase
+            .auth()
+            .signInWithEmailAndPassword(form[0].value, form[1].value)
+        } catch (e) {
+          signUp = e
+        }
+        if ((signUp.user || '') === '') {
+          errorDiv.innerHTML = signUp.message || 'Error'
+        } else {
+          window.location = 'browse.html'
+        }
+      }
+      let searchList = []
       function load() {
         let element = document.getElementById('header')
-        const logged = firebase.auth().currentUser
-        if (logged !== null) {
-          element.innerHTML = `<div class="signIn"><a href="#">Favourites</a><a href="#" onclick="logOut()">Log out</a></div>`
-        } else {
-          element.innerHTML = `<div class="signIn"><a href="signup.html">Sign Up</a><a href="#" onclick="openLogin()">Sign In</a></div>`
-          setTimeout(load, 100)
-        }
+        element.innerHTML = `<div class="signIn" id="signIn"><a href="signup.html">Sign Up</a><a href="javascript:void(0)" onclick="openLogin()">Sign In</a></div>`
         element.innerHTML += `
     <div class="header-text"><h1><a href="index.html">Reflix</a></h1>This is the best video library platform you could have ever imagined!</div>
-    <div class="searchBar"><input type="text" class="searchBar-input" placeholder="Find a movie!" /></div>`
+    <div class="searchBar">
+        <input type="text" list="search-list" class="searchBar-input" placeholder="Find a movie!" id="search-input" autocomplete="off" />
+     
+    </div>`
+        isLoggedIn()
+      }
+      function isLoggedIn() {
+        const logged = firebase.auth().currentUser
+        const element = document.getElementById('signIn')
+        if (logged !== null) {
+          element.innerHTML = `<a href="#">Favourites</a><a href="#" onclick="logOut()">Log out</a>`
+        } else {
+          element.innerHTML = `<a href="signup.html">Sign Up</a><a href="#" onclick="openLogin()">Sign In</a>`
+          setTimeout(isLoggedIn, 100)
+        }
       }
       load()
       async function logOut() {
         firebase.auth().signOut()
         document.location = 'index.html'
       }
+      function uniqBy(a, key) {
+        return [...new Map(a.map((x) => [x[key], x])).values()]
+      }
+      document
+        .getElementById('search-input')
+        .addEventListener('keyup', async (e) => {
+          if (e.key === undefined || e.key === 'Enter') {
+            console.log('enter')
+            document.location =
+              'details.html#' +
+              [...document.getElementById('search-list').children].filter(
+                (f) => f.value == e.target.value,
+              )[0].dataset.url
+
+            return
+          }
+          const value = e.srcElement.value
+          search = null
+          try {
+            let search = await (
+              await fetch('http://localhost:3000/search/' + value)
+            ).json()
+
+            if (search.success && Array.isArray(search.movies)) {
+              let uniq = uniqBy(search.movies, 'url')
+              uniq = uniq.filter((e, i) => i < 5)
+              if (JSON.stringify(searchList) !== JSON.stringify(uniq)) {
+                searchList = uniq
+                document.getElementById('search-list').innerHTML = uniq
+                  .map(
+                    (e) => `<option value="${e.title}" data-url="${e.url}" />`,
+                  )
+                  .join('')
+              }
+            }
+          } catch (e) {}
+        })
     </script>
   </body>
 </html>

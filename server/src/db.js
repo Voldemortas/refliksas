@@ -28,6 +28,41 @@ const Movie = mongoose.model('movie', movieSchema, 'movieCollection')
  * @returns {Promise<{success: boolean, movies: reflixMovie[]}>}
  */
 
+const findMovie = async (name) => {
+  let result = []
+  const pattern = new RegExp('(^|\\s)' + name)
+  mongoose.connect('mongodb://localhost/reflix', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+
+  const db = mongoose.connection
+  db.on('error', console.error.bind(console, 'connection error:'))
+
+  try {
+    return {
+      success: true,
+      movies: (
+        await Movie.find(
+          { title: { $regex: pattern, $options: 'gi' } },
+          async (err, movies) => {
+            if (err) return console.error(err)
+            result = await movies
+            mongoose.disconnect()
+            return result
+          },
+        )
+      ).map((e) => new reflixMovie(e)),
+    }
+  } catch (e) {
+    return { success: false, movies: [] }
+  }
+}
+
+/**
+ * @returns {Promise<{success: boolean, movies: reflixMovie[]}>}
+ */
+
 const getAllMovies = async () => {
   let result = []
   mongoose.connect('mongodb://localhost/reflix', {
@@ -97,4 +132,10 @@ const removeAll = async () => {
   } catch (e) {}
   return result
 }
-module.exports = { insertMovies, getAllMovies, reflixMovie, removeAll }
+module.exports = {
+  insertMovies,
+  findMovie,
+  getAllMovies,
+  reflixMovie,
+  removeAll,
+}
