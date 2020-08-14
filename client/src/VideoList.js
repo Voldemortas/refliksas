@@ -16,9 +16,15 @@ export default async function VideoList(
     for (let i = 0; i < Math.min(data.movies.length, 20); i++) {
       element.innerHTML += `
       <div class="videoList-box">
-        <div class="videoList-image"><img src="${data.movies[i].image}" /></div>
+        <div class="videoList-image">
+          <a href="details.html#${data.movies[i].url}">
+            <img src="${data.movies[i].image}" />
+          </a>
+        </div>
         <div class="videoList-title">
-          ${data.movies[i].title}
+          <a href="details.html#${data.movies[i].url}">
+            ${data.movies[i].title}
+          </a>
         </div>
       </div>`
     }
