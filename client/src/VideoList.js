@@ -1,3 +1,4 @@
+import VideoCard from './VideoCard'
 export default async function VideoList(
   name = '',
   predicate = () => true,
@@ -16,19 +17,7 @@ export default async function VideoList(
   if (data.success) {
     data = data.movies.filter(predicate)
     for (let i = 0; i < Math.min(data.length, 20); i++) {
-      element.innerHTML += `
-      <div class="videoList-box">
-        <div class="videoList-image">
-          <a href="details.html#${data[i].url}">
-            <img src="${data[i].image}" />
-          </a>
-        </div>
-        <div class="videoList-title">
-          <a href="details.html#${data[i].url}">
-            ${data[i].title}
-          </a>
-        </div>
-      </div>`
+      element.innerHTML += (await VideoCard(data[i])).outerHTML
     }
   } else {
     for (let i = 0; i < amount; i++) {
