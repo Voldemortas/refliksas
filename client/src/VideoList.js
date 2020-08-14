@@ -1,9 +1,10 @@
 export default async function VideoList(
   name = '',
-  link = 'http://localhost:3000/',
+  predicate = () => true,
   amount = 10,
 ) {
   const element = document.createElement('div')
+  const link = `http://localhost:3000/`
   element.setAttribute('class', 'videoList')
   let data = { success: false }
 
@@ -13,17 +14,18 @@ export default async function VideoList(
     console.log(e)
   }
   if (data.success) {
-    for (let i = 0; i < Math.min(data.movies.length, 20); i++) {
+    data = data.movies.filter(predicate)
+    for (let i = 0; i < Math.min(data.length, 20); i++) {
       element.innerHTML += `
       <div class="videoList-box">
         <div class="videoList-image">
-          <a href="details.html#${data.movies[i].url}">
-            <img src="${data.movies[i].image}" />
+          <a href="details.html#${data[i].url}">
+            <img src="${data[i].image}" />
           </a>
         </div>
         <div class="videoList-title">
-          <a href="details.html#${data.movies[i].url}">
-            ${data.movies[i].title}
+          <a href="details.html#${data[i].url}">
+            ${data[i].title}
           </a>
         </div>
       </div>`
