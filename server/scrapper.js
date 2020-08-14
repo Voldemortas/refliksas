@@ -26,19 +26,23 @@ const getIds = (data) => {
     .filter(onlyUnique)
 }
 
-const getImg = (url, width) =>
-  `${url}${width}_CR0,0,${width},${Math.floor(width / 0.675)}_AL_.jpg`
-
 const getMoviesData = async (ids) => {
   const start = new Date().getTime()
-  const browser = await puppeteer.launch()
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--lang=en-US,en'],
+  })
+
   const page = await browser.newPage()
+  await page.setExtraHTTPHeaders({
+    'Accept-Language': 'en-US',
+  })
   let movies = []
   for (let i = 0; i < ids.length; i++) {
     try {
       console.log(`${i + 1}/${ids.length}\n${movieUrl(ids[i])}`)
       await page.goto(movieUrl(ids[i]))
-      const data = await page.evaluate(() => {
+      let data = await page.evaluate(() => {
         const title = [
           ...document.title.matchAll(/([\u0000-\uffff]+)\s\([\d]+\)\s-\sIMDb/g),
         ][0][1]
@@ -47,27 +51,41 @@ const getMoviesData = async (ids) => {
         )[0].src
         const description = [...document.getElementsByName('description')][0]
           .content
+        const genres = JSON.parse(
+          `{ ${
+            [
+              ...document.documentElement.innerHTML.matchAll(
+                /("genre": (\[[\w\s-"\n,]+\]|("[\w-]+)")),\n/g,
+              ),
+            ][0][1]
+          } }`,
+        ).genre
+        const plot = [
+          ...document
+            .getElementById('titleStoryLine')
+            .getElementsByTagName('span'),
+        ][1].innerText
+
         return {
           title,
           image: imgSrc,
           description,
+          genres,
+          plot,
         }
       })
 
+      data = {
+        ...data,
+        url: ids[i],
+        image: [...data.image.matchAll(/(.+_V1_U(X|Y))/g)][0][0],
+      }
       try {
-        await insertMovies([
-          {
-            ...data,
-            image: [...data.image.matchAll(/(.+_V1_U(X|Y))/g)][0][0],
-          },
-        ])
+        await insertMovies([data])
       } catch (e) {
         console.log(e)
       }
-      movies.push({
-        ...data,
-        image: [...data.image.matchAll(/(.+_V1_U(X|Y))/g)][0][0],
-      })
+      movies.push(data)
     } catch (e) {
       console.log(e)
     }

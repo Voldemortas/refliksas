@@ -4,6 +4,9 @@ const movieSchema = new mongoose.Schema({
   title: String,
   image: String,
   description: String,
+  url: String,
+  genres: [String],
+  plot: String,
 })
 
 class reflixMovie {
@@ -11,6 +14,9 @@ class reflixMovie {
     this.title = props.title
     this.image = props.image
     this.description = props.description
+    this.url = props.url
+    this.genres = props.genres
+    this.plot = props.plot
   }
 }
 
