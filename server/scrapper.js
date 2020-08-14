@@ -1,5 +1,8 @@
 const { insertMovies, reflixMovie, removeAll } = require('./src/db')
 const puppeteer = require('puppeteer')
+const fetch = require('node-fetch')
+
+const apiKey = `8f0995e757edbf5701bbb5c4ad724afb`
 
 const ratedUrl = `https://www.imdb.com/chart/top`
 const popularUrl = `https://www.imdb.com/chart/moviemeter`
@@ -75,10 +78,33 @@ const getMoviesData = async (ids) => {
         }
       })
 
+      let youtube = null
+      try {
+        const imdb = (
+          await (
+            await fetch(
+              `https://api.themoviedb.org/3/find/${ids[i]}?api_key=${apiKey}&language=en-US&external_source=imdb_id`,
+            )
+          ).json()
+        ).movie_results[0].id
+        console.log(imdb)
+        console.log(
+          `https://api.themoviedb.org/3/movie/${imdb}/videos?api_key=${apiKey}`,
+        )
+        youtube = (
+          await (
+            await fetch(
+              `https://api.themoviedb.org/3/movie/${imdb}/videos?api_key=${apiKey}`,
+            )
+          ).json()
+        ).results.filter((e) => e.site === 'YouTube')[0].key
+      } catch (e) {}
+
       data = {
         ...data,
         url: ids[i],
         image: [...data.image.matchAll(/(.+_V1_U(X|Y))/g)][0][0],
+        youtube,
       }
       try {
         await insertMovies([data])

@@ -7,6 +7,7 @@ const movieSchema = new mongoose.Schema({
   url: String,
   genres: [String],
   plot: String,
+  youtube: String,
 })
 
 class reflixMovie {
@@ -17,6 +18,7 @@ class reflixMovie {
     this.url = props.url
     this.genres = props.genres
     this.plot = props.plot
+    this.youtube = props.youtube
   }
 }
 
