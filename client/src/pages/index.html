@@ -49,15 +49,14 @@
         let element = document.getElementById('header')
         const logged = firebase.auth().currentUser
         if (logged !== null) {
-          element.innerHTML = `<div class="signIn"><a href="#">Favourites</a><a href="#" onclick="logOut()">Log out</a></div>
-    <div class="header-text"><h1>Reflix</h1>This is the best video library platform you could have ever imagined!</div>
-    <div class="searchBar"><input type="text" class="searchBar-input" placeholder="Find a movie!" /></div>`
+          element.innerHTML = `<div class="signIn"><a href="#">Favourites</a><a href="#" onclick="logOut()">Log out</a></div>`
         } else {
-          element.innerHTML = `<div class="signIn"><a href="signup.html">Sign Up</a><a href="#" onclick="openLogin()">Sign In</a></div>
-      <div class="header-text"><h1>Reflix</h1>This is the best video library platform you could have ever imagined!</div>
-      <div class="searchBar"><input type="text" class="searchBar-input" placeholder="Find a movie!" /></div>`
+          element.innerHTML = `<div class="signIn"><a href="signup.html">Sign Up</a><a href="#" onclick="openLogin()">Sign In</a></div>`
           setTimeout(load, 100)
         }
+        element.innerHTML += `
+    <div class="header-text"><h1><a href="index.html">Reflix</a></h1>This is the best video library platform you could have ever imagined!</div>
+    <div class="searchBar"><input type="text" class="searchBar-input" placeholder="Find a movie!" /></div>`
       }
       load()
       async function logOut() {
