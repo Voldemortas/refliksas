@@ -22,10 +22,6 @@
 
     <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-app.js"></script>
-
-    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
-    <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-analytics.js"></script>
-
     <!-- Add Firebase products that you want to use -->
     <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-firestore.js"></script>
@@ -108,11 +104,11 @@
         let element = document.getElementById('header')
         element.innerHTML = `<div class="signIn" id="signIn"><a href="signup.html">Sign Up</a><a href="javascript:void(0)" onclick="openLogin()">Sign In</a></div>`
         element.innerHTML += `
-    <div class="header-text"><h1><a href="index.html">Reflix</a></h1>This is the best video library platform you could have ever imagined!</div>
-    <div class="searchBar">
-        <input type="text" list="search-list" class="searchBar-input" placeholder="Find a movie!" id="search-input" autocomplete="off" />
-     
-    </div>`
+      <div class="header-text"><h1><a href="index.html">Reflix</a></h1>This is the best video library platform you could have ever imagined!</div>
+      <div class="searchBar">
+          <input type="text" list="search-list" class="searchBar-input" placeholder="Find a movie!" id="search-input" autocomplete="off" />
+
+      </div>`
         isLoggedIn()
       }
       function isLoggedIn() {
@@ -132,6 +128,47 @@
       }
       function uniqBy(a, key) {
         return [...new Map(a.map((x) => [x[key], x])).values()]
+      }
+      async function isFav() {
+        if (firebase.auth().currentUser === null) {
+          return
+        }
+        let data = { success: false }
+        try {
+          let collections = (await db.collection('favs').get()).docs
+            .filter((e) => e.id === firebase.auth().currentUser.uid)[0]
+            .data().movies
+          data = {
+            success: collections.map((e) => '#' + e).includes(location.hash),
+            data: collections,
+          }
+        } catch (e) {}
+        return data
+      }
+      async function toggleFav(element) {
+        element.setAttribute('disabled', true)
+        if (firebase.auth().currentUser === null) {
+          return
+        }
+        let data = await isFav()
+        try {
+          if (data.success) {
+            await db
+              .collection('favs')
+              .doc(firebase.auth().currentUser.uid)
+              .set({
+                movies: data.data.filter((e) => '#' + e !== location.hash),
+              })
+          } else {
+            await db
+              .collection('favs')
+              .doc(firebase.auth().currentUser.uid)
+              .set({
+                movies: [...data.data, location.hash.substr(1)],
+              })
+          }
+        } catch (e) {}
+        element.removeAttribute('disabled')
       }
       document
         .getElementById('search-input')

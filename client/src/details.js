@@ -43,9 +43,23 @@ const loadData = async () => {
     img.innerHTML = '<img src="' + movie.image + '" />'
     video.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${movie.youtube}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
     plot.innerHTML = movie.plot
-    button.innerHTML = '<b>Genres: ' + movie.genres.join(', ') + '</b>'
+    button.innerHTML =
+      '<button id="details-button-button" hidden onclick="toggleFav(this)"></button> <b>Genres: ' +
+      movie.genres.join(', ') +
+      '</b>'
   }
   return data
+}
+
+const isLogged = async () => {
+  if (firebase.auth().currentUser === null) {
+  } else {
+    document.getElementById('details-button-button').innerHTML = `${
+      (await isFav()).success ? 'Remove from' : 'Add to'
+    } Favourites`
+    document.getElementById('details-button-button').removeAttribute('hidden')
+  }
+  setTimeout(isLogged, 500)
 }
 
 ;(async () => {
@@ -63,18 +77,9 @@ const loadData = async () => {
     }
   }
   document.body.appendChild(await VideoList('Similar movies', predicate))
-})()
 
-const isLogged = () => {
-  if (firebase.auth().currentUser === null) {
-    setTimeout(isLogged, 500)
-  } else {
-    document.getElementById('details-grid-button').innerHTML =
-      `<button>Add to Favourites</button>` +
-      document.getElementById('details-grid-button').innerHTML
-  }
-}
-isLogged()
+  await isLogged()
+})()
 
 window.addEventListener(
   'hashchange',
