@@ -20,11 +20,6 @@ const Login = () => {
 const Script = () => {
   const element = document.createElement('script')
   element.innerHTML = `
-  setInterval(() => {  
-    if(firebase.auth().currentUser !== null){
-      window.location = 'browse.html'
-    }
-  }, 500)
   function openLogin(){
     document.getElementById('login').showModal()
   }
@@ -46,6 +41,8 @@ const Script = () => {
     }
     if((signUp.user || '') === ''){
       errorDiv.innerHTML = signUp.message || 'Error'
+    }else{
+      window.location = 'browse.html'
     }
   }
   `

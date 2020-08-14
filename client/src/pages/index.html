@@ -43,5 +43,27 @@
       firebase.initializeApp(firebaseConfig)
       let db = firebase.firestore()
     </script>
+    <header class="header" id="header"></header>
+    <script>
+      function load() {
+        let element = document.getElementById('header')
+        const logged = firebase.auth().currentUser
+        if (logged !== null) {
+          element.innerHTML = `<div class="signIn"><a href="#">Favourites</a><a href="#" onclick="logOut()">Log out</a></div>
+    <div class="header-text"><h1>Reflix</h1>This is the best video library platform you could have ever imagined!</div>
+    <div class="searchBar"><input type="text" class="searchBar-input" placeholder="Find a movie!" /></div>`
+        } else {
+          element.innerHTML = `<div class="signIn"><a href="signup.html">Sign Up</a><a href="#" onclick="openLogin()">Sign In</a></div>
+      <div class="header-text"><h1>Reflix</h1>This is the best video library platform you could have ever imagined!</div>
+      <div class="searchBar"><input type="text" class="searchBar-input" placeholder="Find a movie!" /></div>`
+          setTimeout(load, 100)
+        }
+      }
+      load()
+      async function logOut() {
+        firebase.auth().signOut()
+        document.location = 'index.html'
+      }
+    </script>
   </body>
 </html>
