@@ -88,9 +88,6 @@ const getMoviesData = async (ids) => {
           ).json()
         ).movie_results[0].id
         console.log(imdb)
-        console.log(
-          `https://api.themoviedb.org/3/movie/${imdb}/videos?api_key=${apiKey}`,
-        )
         youtube = (
           await (
             await fetch(

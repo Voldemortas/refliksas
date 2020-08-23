@@ -111,6 +111,7 @@
       </div>`
         isLoggedIn()
       }
+      let tries = 0
       function isLoggedIn() {
         const logged = firebase.auth().currentUser
         const element = document.getElementById('signIn')
@@ -118,7 +119,9 @@
           element.innerHTML = `<a href="browse.html">Favourites</a><a href="#" onclick="logOut()">Log out</a>`
         } else {
           element.innerHTML = `<a href="signup.html">Sign Up</a><a href="#" onclick="openLogin()">Sign In</a>`
-          setTimeout(isLoggedIn, 100)
+          if (tries++ < 15) {
+            setTimeout(isLoggedIn, 100)
+          }
         }
       }
       load()

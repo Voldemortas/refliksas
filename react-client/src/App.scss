@@ -1,0 +1,211 @@
+$link: #d34f73;
+$link-active: #c14b6a;
+$text: #0c0808;
+$color1: #ffa737;
+$color2: #dc851f;
+$color3: #7e5920;
+$color4: #fff6eb;
+
+html,
+body {
+  font-family: 'Roboto', sans-serif;
+  color: $text;
+  background-color: $color4;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 0px; /* Remove scrollbar space */
+  background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+a {
+  color: $link;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+a:active {
+  color: $link-active;
+}
+
+.header {
+  height: 300px;
+  background-color: $color1;
+  font-size: 22px;
+  text-align: center;
+}
+.signIn {
+  position: absolute;
+  right: 20px;
+}
+.signIn a {
+  margin: 10px;
+}
+.header .header-text {
+  margin-block-start: 0;
+  padding-top: 30px;
+}
+.searchBar {
+  padding-top: 40px;
+  display: inline-block;
+  position: relative;
+  height: 40px;
+  width: 300px;
+}
+.searchBar .searchBar-input {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  font-size: 30px;
+}
+.searchBar .searchBar-input:focus {
+  outline: 0;
+}
+
+.listContainer {
+  text-align: center;
+}
+
+.videoList {
+  margin: 0 15px 0 15px;
+  max-width: 100%;
+  overflow-x: scroll;
+  display: flex;
+  ::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+  }
+}
+
+.videoList-box {
+  display: inline-block;
+  padding: 5px;
+}
+.videoList-image {
+  width: 300px;
+  height: 400px;
+  background-color: $color3;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.inputElement {
+  @extend .searchBar;
+  padding-top: 20px;
+}
+.inputElement .inputElement-input {
+  @extend .searchBar-input;
+}
+.inputElement .inputElement-input:focus {
+  outline: 0;
+}
+.inputElement .inputElement-button {
+  width: calc(100% + 6px);
+  height: 100%;
+  border-radius: 4px;
+  font-size: 30px;
+}
+.inputElement .inputElement-button:hover {
+  cursor: pointer;
+  background-color: $color4;
+}
+.inputElement .inputElement-button:active {
+  background-color: white;
+}
+
+main {
+  text-align: center;
+  //height: calc(100% - 300px);
+}
+
+.signUpForm {
+  display: inline-block;
+  background-color: white;
+  width: 80%;
+  height: 100%;
+}
+
+#login {
+  width: 500px;
+  border-radius: 4px;
+  border-width: 1px;
+  top: 50px;
+  text-align: center;
+}
+.dialog-close {
+  float: right;
+  border-color: black;
+  border-width: 1px;
+  border-style: solid;
+  background-color: red;
+  border-radius: 100%;
+  width: 20px;
+  height: 19px;
+  padding-top: 1px;
+  text-align: center;
+}
+.dialog-close:hover {
+  cursor: pointer;
+  user-select: none;
+}
+dialog::backdrop {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.details {
+  @extend .signUpForm;
+  width: 950px;
+}
+
+.details-grid {
+  width: 100%;
+}
+
+.details-grid-image {
+  width: 300px;
+  background-color: $color3;
+  height: 400px;
+  margin-right: 10px;
+  display: inline-block;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.details-grid-player {
+  width: 600px;
+  height: 400px;
+  background-color: black;
+  color: white;
+  display: inline-block;
+}
+
+.details-grid-button {
+  text-align: left;
+  padding-left: 8px;
+}
+
+.details-grid-button button {
+  height: 40px;
+  background-color: #89cff0;
+  border-width: 0px;
+  margin: 10px;
+}
+
+.details-grid-button button:hover {
+  cursor: pointer;
+  background-color: #99dfff;
+}
