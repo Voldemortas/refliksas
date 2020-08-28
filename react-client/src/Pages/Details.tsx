@@ -18,10 +18,8 @@ const Main = () => {
   const ref = React.useRef<HTMLButtonElement>(null)
   async function toggleFav() {
     if (ref.current === null) {
-      console.log('blet')
       return
     }
-    console.log('a')
     const element = ref.current!
     element.setAttribute('disabled', 'true')
     try {
@@ -70,7 +68,6 @@ const Main = () => {
   useEffect(() => {
     ;(async () => {
       let newState = { ...state }
-      console.log(newState)
       const hash = document.location.hash
       if (state.loaded === Loaded.inited) {
         try {
@@ -87,7 +84,6 @@ const Main = () => {
         //@ts-ignore
         if (firebase.auth().currentUser === null) {
           newState = { ...newState, fav: Loaded.failed }
-          return () => 1
         }
         let data = { success: false, data: [] }
         try {
