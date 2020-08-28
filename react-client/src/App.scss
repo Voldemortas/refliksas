@@ -24,12 +24,24 @@ body {
 a {
   color: $link;
   text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+  &:active {
+    color: $link-active;
+  }
 }
-a:hover {
-  text-decoration: underline;
-}
-a:active {
-  color: $link-active;
+
+.clickable {
+  color: $link;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  &:active {
+    color: $link-active;
+  }
 }
 
 .header {

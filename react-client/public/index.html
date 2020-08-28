@@ -28,6 +28,24 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase-firestore.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: 'AIzaSyCvPb4-4lxErAgLzStpMP00BqlBasV12Ak',
+        authDomain: 'tesadasasdasdas.firebaseapp.com',
+        databaseURL: 'https://tesadasasdasdas.firebaseio.com',
+        projectId: 'tesadasasdasdas',
+        storageBucket: 'tesadasasdasdas.appspot.com',
+        messagingSenderId: '176738691269',
+        appId: '1:176738691269:web:6c8d045815c91246d8e8ac',
+      }
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig)
+      let db = firebase.firestore()
+    </script>
     <div id="root"></div>
     <!--
       This HTML file is a template.
