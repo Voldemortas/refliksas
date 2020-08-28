@@ -48,7 +48,7 @@ const VideoList = (props: VideoListType) => {
       <div className="videoList">
         {state.loaded === Loaded.success ? (
           <>
-            {state.movies!.map((e, i) => (
+            {state.movies!.filter(props.predicate).map((e, i) => (
               <VideoCard {...e} key={e.title + i} />
             ))}
           </>
