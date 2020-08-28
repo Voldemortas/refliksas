@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import * as serviceWorker from './serviceWorker'
 import Main from './Pages/main'
+import Details from './Pages/Details'
 import Header from './Components/Header'
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 
@@ -13,11 +14,8 @@ firebase.auth().onAuthStateChanged((user) => {
       <React.StrictMode>
         <Header />
         <Switch>
-          <Route path="/about">
-            <div>Hello</div>
-          </Route>
-          <Route path="/users">
-            <div>World</div>
+          <Route path="/details">
+            <Details />
           </Route>
           <Route path="/">
             <Main />

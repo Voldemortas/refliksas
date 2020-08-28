@@ -2,6 +2,9 @@ type MovieDataType = {
   image: string
   url: string
   title: string
+  plot: string
+  youtube: string
+  genres: string[]
 }
 
 type VideoListType = {
@@ -10,7 +13,14 @@ type VideoListType = {
   amount: number
 }
 
-const defaultMovieDate: MovieDataType = { image: '', url: '', title: '' }
+const defaultMovieDate: MovieDataType = {
+  image: '',
+  url: '',
+  title: '',
+  plot: '',
+  youtube: '',
+  genres: [''],
+}
 const defaultVideoList: VideoListType = {
   name: '',
   predicate: () => true,

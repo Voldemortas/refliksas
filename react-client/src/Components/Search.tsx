@@ -15,7 +15,7 @@ const Search = () => {
         if (e.key === undefined || e.key === 'Enter') {
           console.log('enter')
           document.location.href =
-            'details.html#' +
+            'details#' +
             Array.from(searchRef.current!.options).filter(
               (f) => f.value == value,
             )[0].dataset.url
