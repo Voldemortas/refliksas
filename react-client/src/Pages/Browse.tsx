@@ -1,0 +1,72 @@
+import * as React from 'react'
+import { MovieDataType } from '../types'
+import VideoCard from '../Components/VideoCard'
+
+enum Loaded {
+  inited,
+  success,
+  failed,
+}
+
+type StateType = {
+  movies: MovieDataType[]
+  loaded: Loaded
+  favMovies: string[]
+}
+
+const Browse = () => {
+  const [state, setState] = React.useState<StateType>({
+    movies: [],
+    loaded: Loaded.inited,
+    favMovies: [],
+  })
+  async function api() {
+    const link = `http://localhost:3000/`
+    let newState = { ...state }
+    let data = { success: false, data: [] }
+    try {
+      newState.movies = (await (await fetch(link)).json()).movies
+      //@ts-ignore
+      let collections = (await db.collection('favs').get()).docs
+        //@ts-ignore
+        .filter((e) => e.id === firebase.auth().currentUser.uid)[0]
+        .data().movies
+      //@ts-ignore
+      data = {
+        //@ts-ignore
+        success: collections
+          //@ts-ignore
+          .map((e) => '#' + e)
+          .includes(window.location.hash),
+        //@ts-ignore
+        data: collections,
+      }
+      newState = { ...newState, favMovies: data.data, loaded: Loaded.success }
+    } catch (e) {
+      newState.loaded = Loaded.failed
+    }
+    console.log('new', newState)
+    setState({ ...state, ...newState })
+  }
+
+  React.useEffect(() => {
+    if (state.loaded === Loaded.inited) {
+      ;(async () => {
+        await api()
+        console.log(state)
+      })()
+    }
+  })
+
+  return (
+    <main id="main">
+      {state.favMovies
+        .map((e) => state.movies.filter((f) => f.url === e)[0])
+        .map((e) => (
+          <VideoCard {...e} />
+        ))}
+    </main>
+  )
+}
+
+export default Browse

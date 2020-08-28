@@ -4,6 +4,7 @@ import './index.css'
 import * as serviceWorker from './serviceWorker'
 import Main from './Pages/main'
 import Details from './Pages/Details'
+import Browse from './Pages/Browse'
 import Header from './Components/Header'
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 
@@ -16,6 +17,9 @@ firebase.auth().onAuthStateChanged((user) => {
         <Switch>
           <Route path="/details">
             <Details />
+          </Route>
+          <Route path="/browse">
+            <Browse />
           </Route>
           <Route path="/">
             <Main />

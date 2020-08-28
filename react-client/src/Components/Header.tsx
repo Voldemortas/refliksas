@@ -198,7 +198,7 @@ const Header = () => {
               </>
             ) : (
               <>
-                <Link to="register">Favourites</Link>
+                <Link to="browse">Favourites</Link>
                 <span className="clickable" onClick={logOut}>
                   Log Out
                 </span>
@@ -208,7 +208,7 @@ const Header = () => {
         </div>
         <div className="header-text">
           <h1>
-            <a href="index.html">Reflix</a>
+            <a href="/">Reflix</a>
           </h1>
           This is the best video library platform you could have ever imagined!
         </div>
