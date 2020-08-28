@@ -13,7 +13,7 @@ const Dialog: React.FunctionComponent<DialogType> = (props) => {
   }
 
   return (
-    <dialog id={props.title} ref={props.Ref}>
+    <dialog id={props.title} className="dialog-form" ref={props.Ref}>
       <div className="dialog-close" onClick={close}>
         ×
       </div>

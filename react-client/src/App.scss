@@ -1,10 +1,10 @@
 $link: #d34f73;
 $link-active: #c14b6a;
-$text: #0c0808;
+$text: #ffefdc;
 $color1: #ffa737;
 $color2: #dc851f;
 $color3: #7e5920;
-$color4: #fff6eb;
+$color4: #130a01;
 
 html,
 body {
@@ -126,7 +126,7 @@ a {
 }
 .inputElement .inputElement-button:hover {
   cursor: pointer;
-  background-color: $color4;
+  background-color: $text;
 }
 .inputElement .inputElement-button:active {
   background-color: white;
@@ -139,7 +139,6 @@ main {
 
 .signUpForm {
   display: inline-block;
-  background-color: white;
   width: 80%;
   height: 100%;
 }
