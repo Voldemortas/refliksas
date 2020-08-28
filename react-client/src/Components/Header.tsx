@@ -1,6 +1,7 @@
 import * as React from 'react'
 import Dialog from './Dialog'
 import { Link } from 'react-router-dom'
+import Search from './Search'
 
 const Login = (props: { Ref: React.RefObject<HTMLDialogElement> }) => {
   const FormRef = React.useRef<HTMLFormElement>(null)
@@ -169,42 +170,51 @@ const Header = () => {
     }
   }
   return (
-    <header className="header" id="header">
-      <div className="signIn">
-        {
-          //@ts-ignore
-          firebase.auth().currentUser === null ? (
-            <>
-              <span
-                className="clickable"
-                onClick={() => {
-                  showModal(LoginRef)
-                }}
-              >
-                Login
-              </span>{' '}
-              <span
-                className="clickable"
-                onClick={() => {
-                  showModal(RegisterRef)
-                }}
-              >
-                Register
-              </span>
-              <Login Ref={LoginRef} />
-              <Register Ref={RegisterRef} />
-            </>
-          ) : (
-            <>
-              <Link to="register">Favourites</Link>
-              <span className="clickable" onClick={logOut}>
-                Log Out
-              </span>
-            </>
-          )
-        }
-      </div>
-    </header>
+    <>
+      <header className="header" id="header">
+        <div className="signIn">
+          {
+            //@ts-ignore
+            firebase.auth().currentUser === null ? (
+              <>
+                <span
+                  className="clickable"
+                  onClick={() => {
+                    showModal(LoginRef)
+                  }}
+                >
+                  Login
+                </span>{' '}
+                <span
+                  className="clickable"
+                  onClick={() => {
+                    showModal(RegisterRef)
+                  }}
+                >
+                  Register
+                </span>
+                <Login Ref={LoginRef} />
+                <Register Ref={RegisterRef} />
+              </>
+            ) : (
+              <>
+                <Link to="register">Favourites</Link>
+                <span className="clickable" onClick={logOut}>
+                  Log Out
+                </span>
+              </>
+            )
+          }
+        </div>
+        <div className="header-text">
+          <h1>
+            <a href="index.html">Reflix</a>
+          </h1>
+          This is the best video library platform you could have ever imagined!
+        </div>
+        <Search />
+      </header>
+    </>
   )
 }
 
