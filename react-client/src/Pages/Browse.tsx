@@ -62,6 +62,10 @@ const Browse = () => {
   }
 
   React.useEffect(() => {
+    //@ts-ignore
+    if (firebase.auth().currentUser === null) {
+      window.location.replace('/')
+    }
     if (state.loaded === Loaded.inited) {
       ;(async () => {
         await api()
