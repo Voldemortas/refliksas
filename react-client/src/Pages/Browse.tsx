@@ -20,6 +20,18 @@ const Browse = () => {
     loaded: Loaded.inited,
     favMovies: [],
   })
+  async function remove(id: string) {
+    try {
+      // prettier-ignore
+      //@ts-ignore
+      await db.collection('favs').doc(firebase.auth().currentUser.uid).set({movies: state.favMovies.filter((e) => e !== id)})
+      // prettier-ignore-end
+      setState({
+        ...state,
+        favMovies: state.favMovies.filter((e) => e !== id),
+      })
+    } catch (e) {}
+  }
   async function api() {
     const link = `http://localhost:3000/`
     let newState = { ...state }
@@ -63,7 +75,12 @@ const Browse = () => {
       {state.favMovies
         .map((e) => state.movies.filter((f) => f.url === e)[0])
         .map((e) => (
-          <VideoCard {...e} />
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            <span className="closeFav" onClick={() => remove(e.url)}>
+              ×
+            </span>
+            <VideoCard {...e} />
+          </div>
         ))}
     </main>
   )
