@@ -41,7 +41,6 @@ const Main = props => {
       } catch (e) {
         newState = { ...newState, fav: Loaded.failed }
       }
-      console.log(newState)
       setState({ ...state, ...newState })
     })()
   }, [])
@@ -161,7 +160,7 @@ const Main = props => {
 
 export default Main
 
-export async function getServerSideProps({ query }) {
+export async function getStaticProps({ query }) {
   const id = query.id as string
   let newState = {}
   try {
@@ -173,10 +172,6 @@ export async function getServerSideProps({ query }) {
   } catch (e) {
     newState = { ...newState, loaded: Loaded.failed }
   }
-  if (firebase.auth().currentUser === null) {
-    newState = { ...newState, fav: Loaded.failed }
-  }
-  let data = { success: false, data: [] }
   newState = {
     ...newState,
     //@ts-ignore
