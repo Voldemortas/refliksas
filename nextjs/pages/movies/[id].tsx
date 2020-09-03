@@ -160,7 +160,7 @@ const Main = props => {
 
 export default Main
 
-export async function getStaticProps({ query }) {
+export async function getServerSideProps({ query }) {
   const id = query.id as string
   let newState = {}
   try {
