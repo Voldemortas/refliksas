@@ -23,10 +23,11 @@ const Browse = () => {
   })
   async function remove(id: string) {
     try {
-      // prettier-ignore
-      //@ts-ignore
-      await db.collection('favs').doc(fire.auth().currentUser.uid).set({movies: state.favMovies.filter((e) => e !== id)})
-      // prettier-ignore-end
+      await db
+        .collection('favs')
+        .doc(fire.auth().currentUser.uid)
+        .set({ movies: state.favMovies.filter(e => e !== id) })
+
       setState({
         ...state,
         favMovies: state.favMovies.filter(e => e !== id),

@@ -2,7 +2,8 @@ import React from 'react'
 import VideoList from '../components/VideoList'
 import { defaultVideoList } from '../types'
 
-const Main = () => {
+const Main = props => {
+  console.log('props', props)
   return (
     <>
       <VideoList

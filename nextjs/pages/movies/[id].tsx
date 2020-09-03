@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { MovieDataType } from '../types'
-import '../App.scss'
+import { useRouter } from 'next/router'
+import { MovieDataType } from '../../types'
+import firebase, { db } from '../../config/firebase'
+
 enum Loaded {
   inited,
   success,
@@ -14,7 +16,9 @@ type StateType = {
   fav: Loaded
   favMovie: string[]
 }
-const Main = () => {
+
+const Main = props => {
+  const id = useRouter().query.id as string
   const ref = React.useRef<HTMLButtonElement>(null)
   async function toggleFav() {
     if (ref.current === null) {
@@ -23,34 +27,31 @@ const Main = () => {
     const element = ref.current!
     element.setAttribute('disabled', 'true')
     try {
-      if (state.favMovie.includes(window.location.hash.substring(1))) {
+      if (state.favMovie.includes(id)) {
         try {
-          // prettier-ignore
-          //@ts-ignore
-          await db.collection('favs').doc(firebase.auth().currentUser.uid).set({movies: state.favMovie.filter(
-              (e) => e !== window.location.hash.substring(1),
-            ),
-          })
+          await db
+            .collection('favs')
+            .doc(firebase.auth().currentUser.uid)
+            .set({
+              movies: state.favMovie.filter(e => e !== id),
+            })
           // prettier-ignore-end
           setState({
             ...state,
-            favMovie: state.favMovie.filter(
-              (e) => e !== window.location.hash.substring(1),
-            ),
+            favMovie: state.favMovie.filter(e => e !== id),
           })
         } catch (e) {}
       } else {
         try {
-          // prettier-ignore
-          //@ts-ignore
-          await db.collection('favs').doc(firebase.auth().currentUser.uid)
-          .set({
-            movies: [...state.favMovie, window.location.hash.substr(1)],
-          })
-          // prettier-ignore-end
+          await db
+            .collection('favs')
+            .doc(firebase.auth().currentUser.uid)
+            .set({
+              movies: [...state.favMovie, id],
+            })
           setState({
             ...state,
-            favMovie: [...state.favMovie, window.location.hash.substr(1)],
+            favMovie: [...state.favMovie, id],
           })
         } catch (e) {}
       }
@@ -68,7 +69,6 @@ const Main = () => {
   useEffect(() => {
     ;(async () => {
       let newState = { ...state }
-      const hash = document.location.hash
       if (state.loaded === Loaded.inited) {
         try {
           let data = {
@@ -81,24 +81,21 @@ const Main = () => {
         }
       }
       if (state.fav === Loaded.inited) {
-        //@ts-ignore
         if (firebase.auth().currentUser === null) {
           newState = { ...newState, fav: Loaded.failed }
         }
         let data = { success: false, data: [] }
         try {
-          //@ts-ignore
           let collections = (await db.collection('favs').get()).docs
-            //@ts-ignore
-            .filter((e) => e.id === firebase.auth().currentUser.uid)[0]
+            .filter(e => e.id === firebase.auth().currentUser.uid)[0]
             .data().movies
           //@ts-ignore
           data = {
             //@ts-ignore
             success: collections
               //@ts-ignore
-              .map((e) => '#' + e)
-              .includes(window.location.hash),
+              .map(e => e)
+              .includes(id),
             //@ts-ignore
             data: collections,
           }
@@ -109,13 +106,13 @@ const Main = () => {
       }
       if (
         state.loaded === Loaded.success &&
-        state.movies.filter((e) => '#' + e.url !== hash).length === 0
+        state.movies.filter(e => e.url !== id).length === 0
       ) {
         newState = { ...newState, loaded: Loaded.failed }
       } else {
         newState = {
           ...newState,
-          main: state.movies.filter((e) => '#' + e.url === hash)[0] || null,
+          main: state.movies.filter(e => e.url === id)[0] || null,
         }
       }
       if (
@@ -157,19 +154,14 @@ const Main = () => {
           </div>
           <div className="details-grid-button" id="details-grid-button">
             <b>
-              {
-                //@ts-ignore
-                firebase.auth().currentUser !== null ? (
-                  <button ref={ref} onClick={toggleFav}>
-                    {state.favMovie.includes(window.location.hash.substring(1))
-                      ? 'Remove from'
-                      : 'Add to'}{' '}
-                    favorites
-                  </button>
-                ) : (
-                  <></>
-                )
-              }
+              {firebase.auth().currentUser !== null ? (
+                <button ref={ref} onClick={toggleFav}>
+                  {state.favMovie.includes(id) ? 'Remove from' : 'Add to'}{' '}
+                  favorites
+                </button>
+              ) : (
+                <></>
+              )}
               Genres:{' '}
               {state.main !== null ? state.main.genres.join(', ') : <></>}
             </b>

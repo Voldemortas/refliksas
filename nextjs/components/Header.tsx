@@ -2,7 +2,7 @@ import * as React from 'react'
 import Dialog from './Dialog'
 import Link from 'next/link'
 import Search from './Search'
-import fire, { User } from '../config/firebase'
+import firebase from '../config/firebase'
 
 const Login = (props: { Ref: React.RefObject<HTMLDialogElement> }) => {
   const FormRef = React.useRef<HTMLFormElement>(null)
@@ -27,7 +27,7 @@ const Login = (props: { Ref: React.RefObject<HTMLDialogElement> }) => {
 
         try {
           //@ts-ignore
-          signUp = await fire
+          signUp = await firebase
             .auth()
             .signInWithEmailAndPassword(form[0].value, form[1].value)
         } catch (e) {
@@ -100,7 +100,7 @@ const Register = (props: { Ref: React.RefObject<HTMLDialogElement> }) => {
 
         try {
           //@ts-ignore
-          signUp = await fire
+          signUp = await firebase
             .auth()
             .createUserWithEmailAndPassword(form[0].value, form[1].value)
         } catch (e) {
@@ -155,11 +155,18 @@ const Register = (props: { Ref: React.RefObject<HTMLDialogElement> }) => {
   )
 }
 
-const Header = () => {
+type HeaderType = {
+  user: firebase.UserInfo | null
+  loaded: boolean
+}
+
+const Header = (props: HeaderType) => {
+  const { user, loaded } = props
+  console.log('props', props)
   const logOut = () => {
     ;(async () => {
       //@ts-ignore
-      await fire.auth().signOut()
+      await firebase.auth().signOut()
       window.location.reload()
     })()
   }
@@ -176,7 +183,7 @@ const Header = () => {
         <div className="signIn">
           {
             //@ts-ignore
-            User().user === null ? (
+            user === null ? (
               <>
                 <span
                   className="clickable"

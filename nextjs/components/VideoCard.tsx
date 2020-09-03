@@ -6,12 +6,12 @@ const VideoCard = (props: MovieDataType) => {
   return (
     <div className="videoList-box">
       <div className="videoList-image">
-        <Link href={'details#' + props.url}>
+        <Link href={'movies/' + props.url}>
           <img src={props.image} />
         </Link>
       </div>
       <div className="videoList-title">
-        <Link href={'details#' + props.url}>{props.title}</Link>
+        <Link href={'movies/' + props.url}>{props.title}</Link>
       </div>
     </div>
   )
