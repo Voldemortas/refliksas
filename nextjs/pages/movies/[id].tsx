@@ -19,6 +19,32 @@ type StateType = {
 
 const Main = props => {
   const id = useRouter().query.id as string
+  useEffect(() => {
+    let newState = { favMovie: [], fav: Loaded.inited }
+    ;(async () => {
+      try {
+        let collections = (await db.collection('favs').get()).docs
+          .filter(e => e.id === firebase.auth().currentUser.uid)[0]
+          .data().movies
+        //@ts-ignore
+        data = {
+          //@ts-ignore
+          success: collections
+            .map(e => e)
+            //@ts-ignore
+            .includes(id),
+          //@ts-ignore
+          data: collections,
+        }
+        //@ts-ignore
+        newState = { ...newState, favMovie: data.data, fav: Loaded.success }
+      } catch (e) {
+        newState = { ...newState, fav: Loaded.failed }
+      }
+      console.log(newState)
+      setState({ ...state, ...newState })
+    })()
+  }, [])
   const ref = React.useRef<HTMLButtonElement>(null)
   async function toggleFav() {
     if (ref.current === null) {
@@ -66,86 +92,29 @@ const Main = props => {
     fav: Loaded.inited,
     favMovie: [],
   })
-  useEffect(() => {
-    ;(async () => {
-      let newState = { ...state }
-      if (state.loaded === Loaded.inited) {
-        try {
-          let data = {
-            success: true,
-            data: (await (await fetch('http://localhost:3000/')).json()).movies,
-          }
-          newState = { ...newState, loaded: Loaded.success, movies: data.data }
-        } catch (e) {
-          newState = { ...newState, loaded: Loaded.failed }
-        }
-      }
-      if (state.fav === Loaded.inited) {
-        if (firebase.auth().currentUser === null) {
-          newState = { ...newState, fav: Loaded.failed }
-        }
-        let data = { success: false, data: [] }
-        try {
-          let collections = (await db.collection('favs').get()).docs
-            .filter(e => e.id === firebase.auth().currentUser.uid)[0]
-            .data().movies
-          //@ts-ignore
-          data = {
-            //@ts-ignore
-            success: collections
-              //@ts-ignore
-              .map(e => e)
-              .includes(id),
-            //@ts-ignore
-            data: collections,
-          }
-          newState = { ...newState, favMovie: data.data, fav: Loaded.success }
-        } catch (e) {
-          newState = { ...newState, fav: Loaded.failed }
-        }
-      }
-      if (
-        state.loaded === Loaded.success &&
-        state.movies.filter(e => e.url !== id).length === 0
-      ) {
-        newState = { ...newState, loaded: Loaded.failed }
-      } else {
-        newState = {
-          ...newState,
-          main: state.movies.filter(e => e.url === id)[0] || null,
-        }
-      }
-      if (
-        state.loaded === Loaded.inited ||
-        state.fav === Loaded.inited ||
-        state.main === null
-      ) {
-        setState({ ...state, ...newState })
-      }
-    })()
-  })
+
   return (
     <main>
       <div className="details">
         <h1 id="movie-title">
-          {state.main === null ? 'A Pretty Long Title' : state.main.title}
+          {props.main === null ? 'A Pretty Long Title' : props.main.title}
         </h1>
         <div className="details-grid">
           <div className="details-grid-image" id="details-grid-image">
-            {state.main === null ? (
+            {props.main === null ? (
               'Image placeholder'
             ) : (
-              <img src={state.main.image} alt="image" />
+              <img src={props.main.image} alt="image" />
             )}
           </div>
           <div className="details-grid-player" id="details-grid-player">
-            {state.main === null ? (
+            {props.main === null ? (
               'Video placeholder'
             ) : (
               <iframe
                 width="100%"
                 height="100%"
-                src={`https://www.youtube.com/embed/${state.main.youtube}`}
+                src={`https://www.youtube.com/embed/${props.main.youtube}`}
                 frameBorder="0"
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen={true}
@@ -163,11 +132,11 @@ const Main = props => {
                 <></>
               )}
               Genres:{' '}
-              {state.main !== null ? state.main.genres.join(', ') : <></>}
+              {props.main !== null ? props.main.genres.join(', ') : <></>}
             </b>
           </div>
           <div className="details-grid-info" id="details-grid-info">
-            {state.main === null
+            {props.main === null
               ? `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
             convallis pharetra neque vel pulvinar. Aliquam arcu mi, condimentum
             vitae pretium sed, porta eget sem. Suspendisse vitae dignissim enim.
@@ -182,7 +151,7 @@ const Main = props => {
             dignissim in. Donec eu porta leo, a faucibus est. Morbi in felis
             eleifend, venenatis ex a, pulvinar mauris. Morbi ut libero non elit
             congue aliquam eget id velit.`
-              : state.main.plot}
+              : props.main.plot}
           </div>
         </div>
       </div>
@@ -191,3 +160,28 @@ const Main = props => {
 }
 
 export default Main
+
+export async function getServerSideProps({ query }) {
+  const id = query.id as string
+  let newState = {}
+  try {
+    let data = {
+      success: true,
+      data: (await (await fetch('http://localhost:3000/')).json()).movies,
+    }
+    newState = { ...newState, loaded: Loaded.success, movies: data.data }
+  } catch (e) {
+    newState = { ...newState, loaded: Loaded.failed }
+  }
+  if (firebase.auth().currentUser === null) {
+    newState = { ...newState, fav: Loaded.failed }
+  }
+  let data = { success: false, data: [] }
+  newState = {
+    ...newState,
+    //@ts-ignore
+    main: newState.movies.filter(e => e.url === id)[0] || null,
+  }
+
+  return { props: { ...newState } }
+}
