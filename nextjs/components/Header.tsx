@@ -206,7 +206,7 @@ const Header = (props: HeaderType) => {
               </>
             ) : (
               <>
-                <Link href="browse">Favourites</Link>
+                <Link href="library">Favourites</Link>
                 <span className="clickable" onClick={logOut}>
                   Log Out
                 </span>

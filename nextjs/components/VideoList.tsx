@@ -62,27 +62,4 @@ const VideoList = (props: VideoListType) => {
   )
 }
 
-export async function getStaticProps(props) {
-  const query = props
-  console.log('vide', props)
-  const id = query.id as string
-  let newState = {}
-  try {
-    let data = {
-      success: true,
-      data: (await (await fetch('http://localhost:3000/')).json()).movies,
-    }
-    newState = { ...newState, loaded: Loaded.success, movies: data.data }
-  } catch (e) {
-    newState = { ...newState, loaded: Loaded.failed }
-  }
-  newState = {
-    ...newState,
-    //@ts-ignore
-    main: newState.movies.filter(e => e.url === id)[0] || null,
-  }
-
-  return { props: { ...newState } }
-}
-
 export default VideoList

@@ -15,7 +15,7 @@ type StateType = {
   favMovies: string[]
 }
 
-const Browse = () => {
+const Browse = props => {
   const [state, setState] = React.useState<StateType>({
     movies: [],
     loaded: Loaded.inited,
@@ -23,11 +23,10 @@ const Browse = () => {
   })
   async function remove(id: string) {
     try {
-      await db
-        .collection('favs')
-        .doc(fire.auth().currentUser.uid)
-        .set({ movies: state.favMovies.filter(e => e !== id) })
-
+      // prettier-ignore
+      //@ts-ignore
+      await db.collection('favs').doc(fire.auth().currentUser.uid).set({movies: state.favMovies.filter((e) => e !== id)})
+      // prettier-ignore-end
       setState({
         ...state,
         favMovies: state.favMovies.filter(e => e !== id),
@@ -65,7 +64,7 @@ const Browse = () => {
 
   React.useEffect(() => {
     //@ts-ignore
-    if (fire.auth().currentUser === null) {
+    if (props.user === null && props.loaded) {
       window.location.replace('/')
     }
     if (state.loaded === Loaded.inited) {
