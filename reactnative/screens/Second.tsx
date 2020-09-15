@@ -6,10 +6,12 @@ import {
   ScrollView,
   View,
   Text,
-  StatusBar,
+  Dimensions,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+
+import MainBar from '../components/MenuBar';
 
 type RootStackParamList = {
   Main: undefined;
@@ -18,19 +20,22 @@ type RootStackParamList = {
 
 type propTypes = StackScreenProps<RootStackParamList, 'Second'>;
 const Second = ({navigation}: propTypes) => {
+  const {width, height} = Dimensions.get('window');
   return (
     <>
-      <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
-          <View style={styles.sectionContainer}>
-            <Text
-              style={styles.sectionDescription}
-              onPress={() => navigation.navigate('Main')}>
-              Go to Main
-            </Text>
+          <View style={{height: height}}>
+            <MainBar />
+            <View style={styles.sectionContainer}>
+              <Text
+                style={styles.sectionDescription}
+                onPress={() => navigation.navigate('Main')}>
+                Go to Main
+              </Text>
+            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -39,8 +44,14 @@ const Second = ({navigation}: propTypes) => {
 };
 
 const styles = StyleSheet.create({
+  SafeAreaView: {
+    position: 'absolute',
+  },
   scrollView: {
-    backgroundColor: Colors.lighter,
+    backgroundColor: 'green',
+    zIndex: 2,
+    elevation: 2,
+    minHeight: '100%',
   },
   engine: {
     position: 'absolute',
@@ -59,7 +70,7 @@ const styles = StyleSheet.create({
     color: Colors.black,
   },
   sectionDescription: {
-    marginTop: 8,
+    marginTop: 48,
     fontSize: 18,
     fontWeight: '400',
     color: Colors.dark,
