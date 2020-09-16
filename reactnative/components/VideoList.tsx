@@ -1,38 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, ToastAndroid} from 'react-native';
+import {View, Text, ToastAndroid} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import VideoCard from './VideoCard';
+import {Video} from '../types';
 
 type propTypes = {
   genres: string[];
   title: string;
+  movies: Video[];
 };
 
-type Video = {
-  title: string;
-  image: string;
-  genres: string[];
-};
-
-const VideoList = ({genres, title}: propTypes) => {
-  const [state, setState] = useState<Video[] | null>(null);
-  useEffect(() => {
-    fetch('https://pastebin.com/raw/EhFct9AM')
-      .then((Response) => {
-        return Response.json();
-      })
-      .then((value) => {
-        setState(value.movies);
-      })
-      .catch((e) => {
-        ToastAndroid.show('Failed to to get movies', 2000);
-        setState([]);
-      });
-  });
+const VideoList = ({genres, title, movies}: propTypes) => {
   const size = 18;
-  return state === null ? (
-    <></>
-  ) : (
+  return (
     <>
       <View
         style={{
@@ -41,7 +21,7 @@ const VideoList = ({genres, title}: propTypes) => {
         }}>
         <Text style={{textAlign: 'center', fontSize: 20}}>{title}</Text>
         <FlatList
-          data={state.filter((e) =>
+          data={movies.filter((e) =>
             e.genres.reduce<boolean>((a, b) => {
               return genres.includes(b) || a;
             }, false),

@@ -1,11 +1,7 @@
 import React from 'react';
 import {View, Text, Image, ImageURISource} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-
-type Video = {
-  title: string;
-  image: string;
-};
+import {Video} from '../types';
 
 const TopAuthBar = ({title, image}: Video) => {
   const size = 18;
@@ -36,7 +32,7 @@ const TopAuthBar = ({title, image}: Video) => {
               width: size * 9,
               height: size * 6,
             }}>
-            <Text style={{fontSize: 20, textAlign: 'center'}}>{title}</Text>
+            <Text style={{fontSize: 18, textAlign: 'center'}}>{title}</Text>
           </View>
         </View>
       </TouchableOpacity>
