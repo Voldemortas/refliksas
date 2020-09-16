@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "176738691269",
+    "firebase_url": "https://tesadasasdasdas.firebaseio.com",
+    "project_id": "tesadasasdasdas",
+    "storage_bucket": "tesadasasdasdas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176738691269:android:d333d07c7f83d777d8e8ac",
+        "android_client_info": {
+          "package_name": "lt.andriaus.reflix"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "176738691269-pt1273gfor591m28vge1gdgtmtnf1lmq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "lt.andriaus.reflix",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "176738691269-gjrq5rss6thrseae10r82q7oq91uhof8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxLg751aRRjZWbe-_4WbaQfPCaQO1rchA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "176738691269-gjrq5rss6thrseae10r82q7oq91uhof8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

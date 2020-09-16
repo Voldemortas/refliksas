@@ -1,18 +1,13 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  TouchableOpacity,
-  BackHandler,
-} from 'react-native';
-import {call} from 'react-native-reanimated';
+import React from 'react';
+import {View, Text, TouchableOpacity, ToastAndroid} from 'react-native';
 import SliderContext from '../context/SliderContext';
+import UserContext from '../context/UserContext';
+import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 const MainBar = () => {
+  const user = auth();
+  const navigation = useNavigation();
   return (
     <SliderContext.Consumer>
       {({context, setContext}) => (
@@ -26,14 +21,14 @@ const MainBar = () => {
           <View
             style={{
               zIndex: 7,
-              width: !context.open ? 50 : 200,
+              width: !context.open ? 50 : 240,
               height: '100%',
-              backgroundColor: !context.open ? 'transparent' : 'red',
+              backgroundColor: !context.open ? 'transparent' : 'green',
             }}>
             <View
               style={{
                 top: 15,
-                left: !context.open ? 15 : 165,
+                left: !context.open ? 15 : 205,
                 width: 35,
                 backgroundColor: 'transparent',
                 zIndex: 6,
@@ -54,12 +49,43 @@ const MainBar = () => {
                 alignContent: 'center',
                 alignItems: 'center',
               }}>
-              <Text>aaa</Text>
-              <Text>aaa</Text>
-              <Text>aaa</Text>
-              <Text>aaa</Text>
-              <Text>aaa</Text>
-              <Text>aaa</Text>
+              <UserContext.Consumer>
+                {(usercCon) => {
+                  const {user, setUser} = usercCon!;
+                  return (
+                    <>
+                      {!user ? (
+                        <>
+                          <Text
+                            onPress={() => {
+                              navigation.navigate('Login');
+                              setContext({open: false});
+                            }}>
+                            Log in
+                          </Text>
+                        </>
+                      ) : (
+                        <>
+                          <Text
+                            onPress={() => {
+                              auth()
+                                .signOut()
+                                .then(() => {
+                                  navigation.navigate('Main');
+                                  setContext({open: false});
+                                })
+                                .catch((e) => {
+                                  console.log(user);
+                                });
+                            }}>
+                            Log out
+                          </Text>
+                        </>
+                      )}
+                    </>
+                  );
+                }}
+              </UserContext.Consumer>
             </View>
           </View>
           <View
